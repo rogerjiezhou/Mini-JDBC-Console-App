@@ -46,7 +46,11 @@ public class DemoApp {
 				
 				case "2" : addProduct(); break;
 				
+				case "3" : listProduct(); break;
+				
 				case "4" : listCategory(); break;
+				
+				case "5" : listPofC(); break;
 				
 			}
 					
@@ -152,6 +156,25 @@ public class DemoApp {
 		
 	}
 	
+	public void listProduct() {
+		try {
+			
+			Statement listProduct = con.createStatement();
+			ResultSet products = listProduct.executeQuery("select * from product");
+			System.out.println("ProductID    ProductName    ProductDescription");
+			System.out.println("----------------------------------------------");
+			while(products.next()) {
+				int offset = 15-products.getString(2).length();
+				System.out.println(products.getString(1) + "            " + products.getString(2) + 
+								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+			}
+			products.close();
+			listProduct.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void listCategory() {
 		try {
 			
@@ -160,10 +183,40 @@ public class DemoApp {
 			System.out.println("CategoryID    CategoryName");
 			System.out.println("-------------------------------");
 			while(categories.next()) {
-				System.out.println(categories.getString(1) + "             " + categories.getString(2));
+				System.out.println(categories.getInt(1) + "             " + categories.getString(2));
 			}
 			categories.close();
 			listCategory.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void listPofC() {
+		int categoryId;
+		
+		System.out.print("Please enter the ID of Category you want to list: ");	
+		categoryId = Integer.parseInt(input.nextLine());
+
+		PreparedStatement productOfC;
+		
+		try {
+			productOfC = con.prepareStatement("select * from product, prodcatg " + 
+											  "where productId = pid " + 
+											  "having cid = ?");
+			productOfC.setInt(1, categoryId);
+			
+			ResultSet products = productOfC.executeQuery();
+			System.out.println("ProductID    ProductName    ProductDescription");
+			System.out.println("----------------------------------------------");
+			while(products.next()) {
+				int offset = 15-products.getString(2).length();
+				System.out.println(products.getString(1) + "            " + products.getString(2) + 
+								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+			}
+			
+			products.close();
+			productOfC.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
