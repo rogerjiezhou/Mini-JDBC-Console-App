@@ -105,6 +105,7 @@ public class DemoApp {
 		String productName;
 		String productDesc;
 		double productPrice;
+		int prodcatg;
 		
 		System.out.print("Please enter the name of new product: ");	
 		productName = input.nextLine();
@@ -113,8 +114,10 @@ public class DemoApp {
 		productDesc = input.nextLine();
 		
 		System.out.print("Please enter the price of new product: ");	
-		productPrice = Double.parseDouble(input.nextLine()) + 0.00;
-		System.out.println(productPrice);
+		productPrice = Double.parseDouble(input.nextLine());
+		
+		System.out.print("Please enter which category of new product belong to: ");	
+		prodcatg = Integer.parseInt(input.nextLine());
 		
 		PreparedStatement newProduct;
 		
@@ -128,6 +131,20 @@ public class DemoApp {
 				System.out.println("New product failed.");
 			else			
 				System.out.println("New product created.");
+			
+			newProduct = con.prepareStatement("select max(productid) as max from product");
+			ResultSet max = newProduct.executeQuery();
+			int maxIndex = 0;
+			while(max.next()){
+				maxIndex = max.getInt(1);
+				System.out.println(maxIndex);
+			}
+			
+			newProduct = con.prepareStatement("insert into prodcatg (pid, cid) values (?, ?)");
+			newProduct.setInt(1, maxIndex);
+			newProduct.setInt(2, prodcatg);
+			newProduct.execute();
+			
 			newProduct.close();
 		} catch(Exception e) {
 			e.printStackTrace();
