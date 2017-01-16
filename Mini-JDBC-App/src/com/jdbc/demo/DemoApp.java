@@ -3,6 +3,7 @@ package com.jdbc.demo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -43,6 +44,10 @@ public class DemoApp {
 			
 				case "1" : addCategory(); break;
 				
+				case "2" : addProduct(); break;
+				
+				case "4" : listCategory(); break;
+				
 			}
 					
 		}		
@@ -51,6 +56,7 @@ public class DemoApp {
 	
 	public void printMenu() {
 		
+		System.out.println();
 		System.out.println("-------------------------------");
 		System.out.println("Input number or type exit to quit");
 		System.out.println("-------------------------------");
@@ -92,6 +98,58 @@ public class DemoApp {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void addProduct() {
+		
+		String productName;
+		String productDesc;
+		double productPrice;
+		
+		System.out.print("Please enter the name of new product: ");	
+		productName = input.nextLine();
+		
+		System.out.print("Please enter the description of new product: ");	
+		productDesc = input.nextLine();
+		
+		System.out.print("Please enter the price of new product: ");	
+		productPrice = Double.parseDouble(input.nextLine()) + 0.00;
+		System.out.println(productPrice);
+		
+		PreparedStatement newProduct;
+		
+		try {
+			newProduct = con.prepareStatement("insert into product (productname, productdescription, productprice)"
+											+ "values (?, ?, ?)");
+			newProduct.setString(1, productName);
+			newProduct.setString(2, productDesc);
+			newProduct.setDouble(3, productPrice);
+			if(newProduct.execute())
+				System.out.println("New product failed.");
+			else			
+				System.out.println("New product created.");
+			newProduct.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void listCategory() {
+		try {
+			
+			Statement listCategory = con.createStatement();
+			ResultSet categories = listCategory.executeQuery("select * from category");
+			System.out.println("CategoryID    CategoryName");
+			System.out.println("-------------------------------");
+			while(categories.next()) {
+				System.out.println(categories.getString(1) + "             " + categories.getString(2));
+			}
+			categories.close();
+			listCategory.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void quitApp() {
