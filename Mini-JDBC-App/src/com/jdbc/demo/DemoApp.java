@@ -198,7 +198,9 @@ public class DemoApp {
 			System.out.println("CategoryID    CategoryName");
 			System.out.println("-------------------------------");
 			while(categories.next()) {
-				System.out.println(categories.getInt(1) + "             " + categories.getString(2));
+				System.out.println(categories.getInt(1) + 
+							new String(new char[14-categories.getString(1).length()]).replace("\0", " ") +	
+							categories.getString(2));
 			}
 			categories.close();
 			listCategory.close();
@@ -329,6 +331,29 @@ public class DemoApp {
 	
 	public void removeProduct() {
 		
+		int productId;
+		int categoryId;
+		
+		System.out.print("Please enter the ID of category which the product belong to: ");	
+		categoryId = Integer.parseInt(input.nextLine());
+		
+		System.out.print("Please enter the ID of product you want to delete: ");	
+		productId = Integer.parseInt(input.nextLine());
+		
+		
+		
+		try {
+			
+			Statement deleteCategory = con.createStatement();
+			
+			deleteCategory.execute("delete from prodcatg where pid = " + productId + " and cid = " + categoryId);
+			
+			deleteCategory.close();
+			System.out.println("Deleting product " + productId + " from category " + categoryId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void recentFiveProduct() {
