@@ -52,11 +52,13 @@ public class DemoApp {
 				
 				case "5" : listPofC(); break;
 				
-				
+				case "6" : avgOfProduct(); break;
 				
 				case "7" : listLargestDesc(); break;
 				
 				case "11" : recentFiveProduct(); break;
+				
+				default : System.out.println("Invalid input, please try again."); break;
 				
 			}
 					
@@ -146,7 +148,6 @@ public class DemoApp {
 			int maxIndex = 0;
 			while(max.next()){
 				maxIndex = max.getInt(1);
-				System.out.println(maxIndex);
 			}
 			
 			newProduct = con.prepareStatement("insert into prodcatg (pid, cid) values (?, ?)");
@@ -156,7 +157,7 @@ public class DemoApp {
 			
 			newProduct.close();
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("The category does not exist.");
 		}
 		
 	}
@@ -227,6 +228,26 @@ public class DemoApp {
 			
 			products.close();
 			productOfC.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void avgOfProduct() {
+		
+		PreparedStatement numOfProducts;
+		PreparedStatement numOfCategories;
+		
+		try {
+			numOfProducts = con.prepareStatement("select count(distinct productId) from product");
+			numOfCategories = con.prepareStatement("select count(distinct categoryId) from category");
+			
+			ResultSet products = numOfProducts.executeQuery();
+			ResultSet categories = numOfCategories.executeQuery();
+			
+			while(!products.next() || !categories.next());
+			System.out.println("Average number of products among all categories: " + products.getInt(1)/categories.getInt(1));
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
