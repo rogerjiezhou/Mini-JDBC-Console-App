@@ -56,6 +56,12 @@ public class DemoApp {
 				
 				case "7" : listLargestDesc(); break;
 				
+				case "8" : deleteCategory(); break;
+				
+				case "9" : deleteProduct(); break;
+				
+				case "10" : removeProduct(); break;
+				
 				case "11" : recentFiveProduct(); break;
 				
 				default : System.out.println("Invalid input, please try again."); break;
@@ -276,6 +282,36 @@ public class DemoApp {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void deleteCategory() {
+		
+		int categoryId;
+		
+		System.out.print("Please enter the name of new product: ");	
+		categoryId = Integer.parseInt(input.nextLine());
+		
+		try {
+			
+			Statement deleteCategory = con.createStatement();
+			
+			deleteCategory.execute("delete from prodcatg where cid = " + categoryId);
+			deleteCategory.execute("delete from category where categoryId = " + categoryId);
+			
+			deleteCategory.close();
+			System.out.println("Deleting category " + categoryId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteProduct() {
+		
+	}
+	
+	public void removeProduct() {
+		
 	}
 	
 	public void recentFiveProduct() {
