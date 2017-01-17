@@ -52,7 +52,11 @@ public class DemoApp {
 				
 				case "5" : listPofC(); break;
 				
+				
+				
 				case "7" : listLargestDesc(); break;
+				
+				case "11" : recentFiveProduct(); break;
 				
 			}
 					
@@ -78,7 +82,6 @@ public class DemoApp {
 		System.out.println("10. Remove Product from a category");
 		System.out.println("11. Display most recent 5 products");
 		System.out.println("");
-
 		
 	}
 	
@@ -163,12 +166,14 @@ public class DemoApp {
 			
 			Statement listProduct = con.createStatement();
 			ResultSet products = listProduct.executeQuery("select * from product");
+			System.out.println("----------------------------------------------");
 			System.out.println("ProductID    ProductName    ProductDescription");
 			System.out.println("----------------------------------------------");
 			while(products.next()) {
-				int offset = 15-products.getString(2).length();
-				System.out.println(products.getString(1) + "            " + products.getString(2) + 
-								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+				System.out.println(products.getString(1) + 
+						  new String(new char[13-products.getString(1).length()]).replace("\0", " ") +							
+						  products.getString(2) + 
+						  new String(new char[15-products.getString(2).length()]).replace("\0", " ") + products.getString(3));
 			}
 			products.close();
 			listProduct.close();
@@ -182,6 +187,7 @@ public class DemoApp {
 			
 			Statement listCategory = con.createStatement();
 			ResultSet categories = listCategory.executeQuery("select * from category");
+			System.out.println("-------------------------------");
 			System.out.println("CategoryID    CategoryName");
 			System.out.println("-------------------------------");
 			while(categories.next()) {
@@ -209,12 +215,14 @@ public class DemoApp {
 			productOfC.setInt(1, categoryId);
 			
 			ResultSet products = productOfC.executeQuery();
+			System.out.println("----------------------------------------------");
 			System.out.println("ProductID    ProductName    ProductDescription");
 			System.out.println("----------------------------------------------");
 			while(products.next()) {
-				int offset = 15-products.getString(2).length();
-				System.out.println(products.getString(1) + "            " + products.getString(2) + 
-								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+				System.out.println(products.getString(1) + 
+						  new String(new char[13-products.getString(1).length()]).replace("\0", " ") +							
+						  products.getString(2) + 
+						  new String(new char[15-products.getString(2).length()]).replace("\0", " ") + products.getString(3));
 			}
 			
 			products.close();
@@ -233,15 +241,41 @@ public class DemoApp {
 															  "from product " +
 															  "where length(productdescription) " + 
 															  " in (select max(length(productdescription)) from product);");
+			System.out.println("----------------------------------------------");
 			System.out.println("ProductID    ProductName    ProductDescription");
 			System.out.println("----------------------------------------------");
 			while(products.next()) {
-				int offset = 15-products.getString(2).length();
-				System.out.println(products.getString(1) + "            " + products.getString(2) + 
-								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+				System.out.println(products.getString(1) + 
+						  new String(new char[13-products.getString(1).length()]).replace("\0", " ") +							
+						  products.getString(2) + 
+						  new String(new char[15-products.getString(2).length()]).replace("\0", " ") + products.getString(3));
 			}
 			products.close();
 			listLargestDesc.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void recentFiveProduct() {
+		
+		try {
+			
+			Statement recentFiveProduct = con.createStatement();
+			ResultSet products = recentFiveProduct.executeQuery("select * " +
+															  "from product " +
+															  "order by productId desc limit 5");														  
+			System.out.println("----------------------------------------------");
+			System.out.println("ProductID    ProductName    ProductDescription");
+			System.out.println("----------------------------------------------");
+			while(products.next()) {
+				System.out.println(products.getString(1) + 
+								  new String(new char[13-products.getString(1).length()]).replace("\0", " ") +							
+								  products.getString(2) + 
+								  new String(new char[15-products.getString(2).length()]).replace("\0", " ") + products.getString(3));
+			}
+			products.close();
+			recentFiveProduct.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
