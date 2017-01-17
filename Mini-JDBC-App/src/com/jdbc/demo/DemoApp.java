@@ -12,13 +12,11 @@ public class DemoApp {
 
 	Connection con;
 	Scanner input;
-	boolean exit;
 	
 	DemoApp() {
 		
 		input = new Scanner(System.in);
-		exit = false;
-		
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/inventory", "root", "root");
@@ -30,45 +28,7 @@ public class DemoApp {
 			e.printStackTrace();
 		}
 		
-		while(!exit) {
-			
-			printMenu();
-			
-			System.out.print("Please input: ");
-			
-			String option = input.nextLine();
-			
-			switch(option) {
-			
-				case "exit" : exit = true; quitApp();  break;
-			
-				case "1" : addCategory(); break;
-				
-				case "2" : addProduct(); break;
-				
-				case "3" : listProduct(); break;
-				
-				case "4" : listCategory(); break;
-				
-				case "5" : listPofC(); break;
-				
-				case "6" : avgOfProduct(); break;
-				
-				case "7" : listLargestDesc(); break;
-				
-				case "8" : deleteCategory(); break;
-				
-				case "9" : deleteProduct(); break;
-				
-				case "10" : removeProduct(); break;
-				
-				case "11" : recentFiveProduct(); break;
-				
-				default : System.out.println("Invalid input, please try again."); break;
-				
-			}
-					
-		}		
+		
 		
 	}
 	
@@ -394,7 +354,50 @@ public class DemoApp {
 	
 	public static void main(String[] args) {
 		
-		new DemoApp();
+		DemoApp app = new DemoApp();
+		boolean exit = false;
+		
+		Scanner input = new Scanner(System.in);
+		
+		while(!exit) {
+			
+			app.printMenu();
+			
+			System.out.print("Please input: ");
+			
+			String option = input.nextLine();
+			
+			switch(option) {
+			
+				case "exit" : exit = true; app.quitApp();  break;
+			
+				case "1" : app.addCategory(); break;
+				
+				case "2" : app.addProduct(); break;
+				
+				case "3" : app.listProduct(); break;
+				
+				case "4" : app.listCategory(); break;
+				
+				case "5" : app.listPofC(); break;
+				
+				case "6" : app.avgOfProduct(); break;
+				
+				case "7" : app.listLargestDesc(); break;
+				
+				case "8" : app.deleteCategory(); break;
+				
+				case "9" : app.deleteProduct(); break;
+				
+				case "10" : app.removeProduct(); break;
+				
+				case "11" : app.recentFiveProduct(); break;
+				
+				default : System.out.println("Invalid input, please try again."); break;
+				
+			}
+					
+		}		
 
 	}
 
