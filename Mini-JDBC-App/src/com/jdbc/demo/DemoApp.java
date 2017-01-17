@@ -288,7 +288,7 @@ public class DemoApp {
 		
 		int categoryId;
 		
-		System.out.print("Please enter the name of new product: ");	
+		System.out.print("Please enter the ID of category you want to delete: ");	
 		categoryId = Integer.parseInt(input.nextLine());
 		
 		try {
@@ -307,7 +307,24 @@ public class DemoApp {
 	}
 	
 	public void deleteProduct() {
+		int productId;
 		
+		System.out.print("Please enter the ID of product you want to delete: ");	
+		productId = Integer.parseInt(input.nextLine());
+		
+		try {
+			
+			Statement deleteCategory = con.createStatement();
+			
+			deleteCategory.execute("delete from prodcatg where pid = " + productId);
+			deleteCategory.execute("delete from product where productId = " + productId);
+			
+			deleteCategory.close();
+			System.out.println("Deleting product " + productId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void removeProduct() {
