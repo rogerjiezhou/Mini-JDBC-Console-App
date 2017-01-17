@@ -52,6 +52,8 @@ public class DemoApp {
 				
 				case "5" : listPofC(); break;
 				
+				case "7" : listLargestDesc(); break;
+				
 			}
 					
 		}		
@@ -217,6 +219,29 @@ public class DemoApp {
 			
 			products.close();
 			productOfC.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void listLargestDesc() {
+			
+		try {
+			
+			Statement listLargestDesc = con.createStatement();
+			ResultSet products = listLargestDesc.executeQuery("select * " +
+															  "from product " +
+															  "where length(productdescription) " + 
+															  " in (select max(length(productdescription)) from product);");
+			System.out.println("ProductID    ProductName    ProductDescription");
+			System.out.println("----------------------------------------------");
+			while(products.next()) {
+				int offset = 15-products.getString(2).length();
+				System.out.println(products.getString(1) + "            " + products.getString(2) + 
+								new String(new char[offset]).replace("\0", " ") + products.getString(3));
+			}
+			products.close();
+			listLargestDesc.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
